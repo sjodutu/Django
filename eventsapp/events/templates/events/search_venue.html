@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="card">
+    <div class="card-header">
+        {% if searched %}
+            You Searched For {{ searched }}
+        {% else %}
+            Search Venues...
+        {% endif %}
+    </div>
+    <div class="card-body">
+        <form method=POST action="{% url 'search-venues' %}">
+            {% csrf_token %}
+            <input class="form-control me-2" type="search" placeholder="Search Venues" aria-label="Search" name="searched">
+            <br/>
+            <button class="btn btn-outline-secondary" type="submit">Search</button>
+        </form>
+    </div>
+</div>
+<br/>
+	{% for venue in venue_list %}
+        <div class="card">
+            <a href="{% url 'venue-detail' venue.id %}">
+            <div class="card-header">
+                Venue
+            </div>
+            </a>
+            <div class="card-body">
+                <h5 class="card-title">{{ venue }}</h5>
+                <p class="card-text">
+                    <ul>
+                        <li>{{ venue.address }}</li>
+                        <li>{{ venue.zip_code }}</li>
+                        <li>{{ venue.phone }}</li>
+                        <li>{{ venue.email_address }}</li>
+                        <li><a href="{{ venue.web }}">{{ venue.web }}</a></li>
+                        <li>Owner ID: {{ venue.owner }} </li>
+                    </ul>
+                </p>
+            </div>
+        </div>
+        <br/>
+	{% endfor %}
+{% endblock %}

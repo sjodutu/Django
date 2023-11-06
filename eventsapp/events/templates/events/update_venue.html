@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block content %}
+{% if user.is_authenticated %}
+	{% if user.is_superuser or user == event.manager %}
+	<h1>Update Venue...</h1>
+	<br/>
+	<form action="" method=POST enctype="multipart/form-data">
+		{% csrf_token %}
+		{{ form.as_p }}
+		<br/>
+		<input type="submit" value="Update" class="btn btn-secondary">
+		{% else %}
+		<h2>Access Denied</h2>
+		<p>Only the event's Manager can update this event...</p>
+		Logged In User:  {{ user }}
+		<br/>
+		Event Manager: {{ event.manager }}
+		<br/>
+	{% endif %}
+{% else %}
+<a href="{% url 'login' %}">Login Here</a>
+{% endif %}
+{% endblock %}

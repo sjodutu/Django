@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+
+{% block content %}
+	<h1>Events</h1>
+	<br/>
+	
+    {% for event in page_obj %}
+        {% if event.approved %}
+        <div class="card">
+            <a href="{% url 'event-detail' event.id %}">
+                <div class="card-header">
+                    {{ event }}
+                </div>
+            </a>
+            <div class="card-body">
+                <h5 class="card-title">Venue: {{ event.venue }}</h5>
+                <p class="card-text">
+                    <ul>
+                        <li class="{% if event.Is_Overdue %}text-danger{% endif %}">Date: {{ event.event_date }}</li>
+                        <li>Days Till Event: {{ event.Days_till }}</li>
+                        <li>Occured: {{ event.Is_past}}</li>
+                        <li>Venue Website: {{ event.venue.web }}</li>
+                        <li>Manager: {{ event.manager }}</li>
+                        <li>Description: {{ event.description }}</li>
+                        <li>Approved: {{ event.approved }}</li>
+                        <li>Attendees:<br/>
+                            {% for user in event.attendees.all %}
+                                 {{ user }}<br/>
+                            {% endfor %}
+                        </li>
+                    </ul>
+                </p>
+            </div>
+
+            {% if user.is_authenticated %}
+                {% if user.is_superuser %}
+                <div class="card-footer text-muted">
+                    <a href="{% url 'update-event' event.id %}" class="btn btn-outline-secondary btn-sm">Update Event</a>
+
+                    <a href="{% url 'delete-event' event.id %}" class="btn btn-outline-danger btn-sm">Delete Event</a>
+                </div>
+                {% endif %}  
+            {% endif %}
+            </div>
+            <br/><br/>
+        {% endif %}
+
+    {% endfor %}
+    <div class="container text-center">
+        <!-- This Bootstrap container centers the content horizontally -->
+        <div class="pagination">
+            <span class="step-links mx-auto">
+                {% if page_obj.has_previous %}
+                    <a href="?page=1" class="btn btn-primary">&laquo; First</a>
+                    <a href="?page={{ page_obj.previous_page_number }}" class="btn btn-primary">Previous</a>
+                {% endif %}
+    
+                <span class="current">
+                    Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+                </span>
+    
+                {% if page_obj.has_next %}
+                    <a href="?page={{ page_obj.next_page_number }}" class="btn btn-primary">Next</a>
+                    <a href="?page={{ page_obj.paginator.num_pages }}" class="btn btn-primary">Last &raquo;</a>
+                {% endif %}
+            </span>
+        </div>
+    </div>
+    
+{% endblock %}

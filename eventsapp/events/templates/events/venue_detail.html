@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="card">
+        <div class="card-header">
+            Venue
+        </div>
+        <div class="card-body">
+            <h5 class="card-title">{{ venue }}</h5>
+            <p class="card-text">
+                <ul>
+                    <li>Adress: {{ venue.address }}</li>
+                    <li>Zip Code {{ venue.zip_code }}</li>
+                    <li>Phone: {{ venue.phone }}</li>
+                    <li>Email Adress {{ venue.email_address }}</li>
+                    <li>Web: <a href="{{ venue.web }}">{{ venue.web }}</a></li>
+                    <li>Owner: {{ venue.owner }} </li>
+                    <li>Owner's Email: {{ venue_owner.email }} </li>
+                </ul>
+            </p>
+            <br/>
+        </div>
+        {% if user.is_authenticated %}
+                {% if user.is_superuser or user == event.manager %}
+                <div class="card-footer text-muted">
+                    <a href="{% url 'update-venue' venue.id %}" class="btn btn-outline-secondary btn-sm">Update Venue</a>
+                    <a href="{% url 'delete-venue' venue.id %}" class="btn btn-outline-danger btn-sm">Delete Venue</a>
+                </div>
+                {% endif %}  
+            {% endif %}
+    </div>
+	<br/>
+{% endblock %}
